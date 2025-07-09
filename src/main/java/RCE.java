@@ -1,5 +1,6 @@
 package  unsafe;
 
+import io.github.pixee.security.SystemCommand;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
@@ -21,7 +22,7 @@ public class RCE {
         @Override
         public void handle(HttpExchange t) throws IOException {
             String qs = t.getRequestURI().getQuery();
-            Process pr = Runtime.getRuntime().exec(qs);
+            Process pr = SystemCommand.runCommand(Runtime.getRuntime(), qs);
             String response = new String(pr.getInputStream().readAllBytes());
             t.sendResponseHeaders(200, response.length());
             OutputStream os = t.getResponseBody();
